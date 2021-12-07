@@ -121,7 +121,6 @@ void get_one_sample_date_mxyz()
 		mz_sample[2] = Mxyz[2];
 }	
 
-
 void getAccel_Data(void)
 {
   accelgyro.getMotion9(&ax, &ay, &az, &gx, &gy, &gz, &mx, &my, &mz);

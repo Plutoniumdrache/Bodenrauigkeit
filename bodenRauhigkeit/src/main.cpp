@@ -1,6 +1,10 @@
 
 #define USE_USBCON // because we are using an Arduino micro
- 
+#define OPTISCHER_SENSOR_PIN A5
+#define LENKUNG_PWM_PIN 9
+#define ESC_PWM_PIN 13
+
+
 #include <ros.h>
 #include <std_msgs/Int16.h>
 #include <std_msgs/Float32.h>
@@ -8,13 +12,7 @@
 
 #include "IMU.h" // functions for the IMU
 #include "rounds.h"
-
-// I2Cdev and MPU9250 must be installed as libraries, or else the .cpp/.h files
-// for both classes must be in the include path of your project
-
-
-
-
+#include "servoControl.h"
 
 ros::NodeHandle  nh;
 
@@ -26,6 +24,13 @@ ros::Publisher pub_imu("IMU", &imu_msg);
 std_msgs::Int16 rounds_msg;
 ros::Publisher pub_rounds("rounds", &rounds_msg);
 
+// Lenkungs Servo PWM
+ros::Subscriber<std_msgs::UInt16> sub_lenkung("lenkung", setLenkwinkel);
+
+// ESC PWM
+ros::Subscriber<std_msgs::UInt16> sub_speed("speed", setSpeed);
+
+
 void setup() {
   // join I2C bus (I2Cdev library doesn't do this automatically)
   Wire.begin();
@@ -33,6 +38,12 @@ void setup() {
   nh.initNode();
   nh.advertise(pub_imu);
   nh.advertise(pub_rounds);
+
+  nh.subscribe(sub_lenkung);
+  lenkung.attach(LENKUNG_PWM_PIN);
+
+  nh.subscribe(sub_speed);
+  ESC.attach(ESC_PWM_PIN);
 
   imu_msg.data_length = 9; // 9 Elemente
   imu_msg.data = (float*)malloc(sizeof(float) * imu_msg.data_length);
@@ -49,7 +60,7 @@ void loop()
 	getCompassDate_calibrated(); // compass data has been calibrated here 
 	getHeading();				//before we use this function we should run 'getCompassDate_calibrated()' frist, so that we can get calibrated data ,then we can get correct angle .					
 	getTiltHeading();           
-	//delay(300); // ACHTUNG KANN PROBLEME MACHEN !!!
+	delay(300); // ACHTUNG KANN PROBLEME MACHEN !!!
 
 	// rounds:
 	rounds_msg.data = getRounds();
@@ -69,5 +80,4 @@ void loop()
     pub_imu.publish(&imu_msg);
 	pub_rounds.publish(&rounds_msg);
     nh.spinOnce();
-	
 }

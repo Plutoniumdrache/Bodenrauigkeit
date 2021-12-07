@@ -10,7 +10,7 @@
 // I2Cdev and MPU9250 must be installed as libraries, or else the .cpp/.h files
 // for both classes must be in the include path of your project
 #include "I2Cdev.h"
-#include "MPU6050.h"
+#include "MPU9250.h"
 
 void getHeading(void);
 void get_calibration_Data();
@@ -22,14 +22,14 @@ void getTiltHeading(void);
 void getCompass_Data(void);
 
 ros::NodeHandle  nh;
-std_msgs::Float32MultiArray temp_msg;
-ros::Publisher pub_temp("IMU", &temp_msg);
+std_msgs::Float32MultiArray imu_msg;
+ros::Publisher pub_imu("IMU", &imu_msg);
 
 // class default I2C address is 0x68
 // specific I2C addresses may be passed as a parameter here
 // AD0 low = 0x68 (default for InvenSense evaluation board)
 // AD0 high = 0x69
-MPU6050 accelgyro;
+MPU9250 accelgyro;
 I2Cdev   I2C_M;
 
 uint8_t buffer_m[6];
@@ -74,9 +74,9 @@ void setup() {
 
 
   nh.initNode();
-  nh.advertise(pub_temp);
-  temp_msg.data_length = 9; // 9 Elemente
-  temp_msg.data = (float*)malloc(sizeof(float) * temp_msg.data_length);
+  nh.advertise(pub_imu);
+  imu_msg.data_length = 9; // 9 Elemente
+  imu_msg.data = (float*)malloc(sizeof(float) * imu_msg.data_length);
 
   
 }
@@ -93,22 +93,22 @@ void loop()
 	delay(300);
 
 
-    temp_msg.data[0] = Axyz[0];
-    temp_msg.data[1] = Axyz[1];
-    temp_msg.data[2] = Axyz[2];
+    imu_msg.data[0] = Axyz[0];
+    imu_msg.data[1] = Axyz[1];
+    imu_msg.data[2] = Axyz[2];
 
-    temp_msg.data[3] = Gxyz[0];
-    temp_msg.data[4] = Gxyz[1];
-    temp_msg.data[5] = Gxyz[2];
+    imu_msg.data[3] = Gxyz[0];
+    imu_msg.data[4] = Gxyz[1];
+    imu_msg.data[5] = Gxyz[2];
 
-    temp_msg.data[6] = Mxyz[0];
-    temp_msg.data[7] = Mxyz[1];
-    temp_msg.data[8] = Mxyz[2];
+    imu_msg.data[6] = Mxyz[0];
+    imu_msg.data[7] = Mxyz[1];
+    imu_msg.data[8] = Mxyz[2];
 
     
     
 
-    pub_temp.publish(&temp_msg);
+    pub_imu.publish(&imu_msg);
     nh.spinOnce();
 	
 }
@@ -132,11 +132,6 @@ void getTiltHeading(void)
   if(yh<0)    tiltheading +=360;
 }
 
-
-
-
-
-
 void get_calibration_Data ()
 {
 		for (int i=0; i<sample_num_mdate;i++)
@@ -151,7 +146,6 @@ void get_calibration_Data ()
 			*/
 
 
-			
 			if (mx_sample[2]>=mx_sample[1])mx_sample[1] = mx_sample[2];			
 			if (my_sample[2]>=my_sample[1])my_sample[1] = my_sample[2]; //find max value			
 			if (mz_sample[2]>=mz_sample[1])mz_sample[1] = mz_sample[2];		
@@ -177,11 +171,6 @@ void get_calibration_Data ()
 			mz_centre = (mz_max + mz_min)/2;	
 	
 }
-
-
-
-
-
 
 void get_one_sample_date_mxyz()
 {		

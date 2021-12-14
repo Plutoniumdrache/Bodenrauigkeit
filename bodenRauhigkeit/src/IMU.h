@@ -26,7 +26,7 @@ uint8_t buffer_m[6];
 
 int16_t ax, ay, az;
 int16_t gx, gy, gz;
-int16_t   mx, my, mz;
+int16_t mx, my, mz;
 
 float heading;
 float tiltheading;

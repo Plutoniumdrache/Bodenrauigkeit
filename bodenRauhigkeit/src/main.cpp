@@ -13,6 +13,9 @@
 #include "rounds.h"
 
 
+void getIMUdata(void);
+
+
 ros::NodeHandle  nh;
 
 // Umdrehungs Data
@@ -49,10 +52,25 @@ void loop()
 	getTiltHeading();
 
 	rounds_msg.data = getRounds();
-
+	getIMUdata();
 	pub_rounds.publish(&rounds_msg);
     pub_imu.publish(&imu_msg);
 
 	nh.spinOnce();
 	delay(300);
+}
+
+void getIMUdata(void){
+	
+	imu_msg.data[0] = Axyz[0];
+	imu_msg.data[1] = Axyz[1];
+	imu_msg.data[2] = Axyz[2];
+
+	imu_msg.data[3] = Gxyz[0];
+	imu_msg.data[4] = Gxyz[1];
+	imu_msg.data[5] = Gxyz[2];
+	
+	imu_msg.data[6] = Mxyz[0];
+	imu_msg.data[7] = Mxyz[1];
+	imu_msg.data[8] = Mxyz[2];
 }

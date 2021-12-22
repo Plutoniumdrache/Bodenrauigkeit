@@ -12,6 +12,7 @@
 
 #include "rounds.h"
 #include "button.h"
+#include "servoControl.h"
 
 ros::NodeHandle  nh;
 
@@ -23,7 +24,11 @@ ros::Publisher pub_rounds("rounds", &rounds_msg);
 std_msgs::Bool startsignal_msg;
 ros::Publisher pub_startsignal("startsignal", &startsignal_msg);
 
+// Lenkungs Servo PWM
+ros::Subscriber<std_msgs::UInt16> sub_lenkung("lenkung", setLenkwinkel);
 
+// ESC PWM
+ros::Subscriber<std_msgs::UInt16> sub_speed("speed", setSpeed);
 
 
 
@@ -32,9 +37,16 @@ void setup() {
   nh.advertise(pub_rounds);
   nh.advertise(pub_startsignal);
 
-
   rounds_msg.data = 0;
   startsignal_msg.data = true;
+
+  nh.subscribe(sub_lenkung);
+  lenkung.attach(LENKUNG_PWM_PIN);
+
+  nh.subscribe(sub_speed);
+  ESC.attach(ESC_PWM_PIN);
+
+
 
   // Tasterstuff:
   pinMode(STARTSIGNAL_PIN, INPUT_PULLUP);
@@ -51,5 +63,5 @@ void loop()
 	pub_startsignal.publish(&startsignal_msg);
 
 	nh.spinOnce();
-	delay(300);
+	delay(30);
 }

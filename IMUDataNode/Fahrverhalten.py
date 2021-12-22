@@ -7,8 +7,8 @@ def Fahrverhalten():
     rospy.init_node('speed')
     rospy.init_node('angle')
     rate = rospy.Rate(10)
-    speed = 0
-    angle = 0
+    speed = 90
+    angle = 90
     while not rospy.is_shutdown():
         rospy.loginfo(speed)
         rospy.loginfo(angle)

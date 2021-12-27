@@ -1,9 +1,11 @@
+#!/usr/bin/env python
+
 import rospy
-import std_msgs
+from std_msgs.msg import UInt16
 
 def Fahrverhalten():
-    pubSpeed = rospy.Publisher('speed', int)
-    pubAngle = rospy.Publisher('angle', int)
+    pubSpeed = rospy.Publisher('speed', UInt16, queue_size=10)
+    pubAngle = rospy.Publisher('angle', UInt16, queue_size=10)
     rospy.init_node('speed')
     rospy.init_node('angle')
     rate = rospy.Rate(10)
@@ -20,5 +22,5 @@ def Fahrverhalten():
 if __name__ == '__main__':
     try:
         Fahrverhalten()
-    except rospy.ROSInterruptException:
+    except rospy.ROSInterruptException: # because we using sleep
         pass

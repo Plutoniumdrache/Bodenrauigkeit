@@ -49,9 +49,30 @@ class IMUProcess:
         
 
     def callbackIMU(self, data):
+        rospy.loginfo("startsignal in imuToCsv: %s", str(self.startsignal))
+        if self.startsignal:
+            self.fileHandle = open(self.genFilename() + '.csv', 'w')
+            self.ax = 0
+            self.ay = 0
+            self.az = 0
+            self.rotations = 0
+            self.speed = 0
+            self.startsignal = False
+            self.running = True
+            rospy.loginfo("got the fucking signal")
+        
         self.ax = data.data[0]
         self.ay = data.data[1]
         self.az = data.data[2]
+        
+        if self.running:
+            if self.rotations <= 50:
+                self.fileHandle.write(self.buildDataString(self.ax, self.ay, self.az, self.rotations, self.speed))
+                rospy.loginfo(self.buildDataString(self.ax, self.ay, self.az, self.rotations, self.speed))
+            elif self.rotations > 50:
+                self.fileHandle.close()
+                self.running = False
+
     
     def callbackRounds(self, data):
         self.rotations = data.data
@@ -73,6 +94,5 @@ class IMUProcess:
 if __name__ == '__main__':
     rospy.init_node('processIMU')
     rospy.loginfo("started processIMU Node")
-    node = IMUProcess()
-    node.imuToCsv()
+    IMUProcess()
     rospy.spin()

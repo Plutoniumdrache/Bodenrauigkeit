@@ -6,7 +6,7 @@
 #define STARTSIGNAL_PIN 2
 
 #include <ros.h>
-#include <std_msgs/Int16.h>
+#include <std_msgs/UInt16.h>
 #include <std_msgs/Float32.h>
 #include <std_msgs/Bool.h>
 
@@ -17,7 +17,7 @@
 ros::NodeHandle  nh;
 
 // Umdrehungs Data:
-std_msgs::Int16 rounds_msg;
+std_msgs::UInt16 rounds_msg;
 ros::Publisher pub_rounds("rounds", &rounds_msg);
 
 // Startsignal:

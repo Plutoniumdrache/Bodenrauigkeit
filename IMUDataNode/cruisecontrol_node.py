@@ -3,24 +3,27 @@
 import rospy
 from std_msgs.msg import UInt16
 
-def Fahrverhalten():
+
+def cruiseControl():
     pubSpeed = rospy.Publisher('speed', UInt16, queue_size=10)
     pubAngle = rospy.Publisher('angle', UInt16, queue_size=10)
-    rospy.init_node('speed')
-    rospy.init_node('angle')
+
+    rospy.init_node('cruiseControl') # only one init call
     rate = rospy.Rate(10)
     speed = 90
     angle = 90
-    while not rospy.is_shutdown():
-        rospy.loginfo(speed)
-        rospy.loginfo(angle)
-        pubSpeed.publish(speed)
-        pubSpeed.publish(angle)
-        rate.sleep
 
+    while not rospy.is_shutdown():
+        rospy.loginfo("Speed: %s", str(speed))
+        pubSpeed.publish(speed)
+
+        rospy.loginfo("Angle: %s", str(angle))
+        pubAngle.publish(angle)
+
+        rate.sleep
 
 if __name__ == '__main__':
     try:
-        Fahrverhalten()
-    except rospy.ROSInterruptException: # because we using sleep
+        cruiseControl()
+    except rospy.ROSInterruptException: # because we are using sleep
         pass

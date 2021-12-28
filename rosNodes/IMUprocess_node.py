@@ -1,0 +1,98 @@
+#!/usr/bin/env python
+
+import rospy
+from std_msgs.msg import UInt16, Float32MultiArray, Bool
+from datetime import date, datetime
+
+class IMUProcess:
+    def __init__(self):
+        # Parameter
+        self.ax = 0
+        self.ay = 0
+        self.az = 0
+        self.rotations = 0
+        self.speed = 0
+        self.startsignal = False
+        self.filename = ""
+        self.fileHandle = None
+        self.running = False
+        
+        # Subscribers
+        rospy.Subscriber('IMU', Float32MultiArray, self.callbackIMU)
+        rospy.Subscriber('rounds', UInt16, self.callbackRounds)
+        rospy.Subscriber('speed', UInt16, self.callbackSpeed)
+        rospy.Subscriber('startsignal', Bool, self.callbackStartsignal)
+
+        # Publishers
+            # none
+
+    def imuToCsv(self):
+        rospy.loginfo("startsignal in imuToCsv: %s", str(self.startsignal))
+        if self.startsignal:
+            self.fileHandle = open(self.genFilename() + '.csv', 'w')
+            self.ax = 0
+            self.ay = 0
+            self.az = 0
+            self.rotations = 0
+            self.speed = 0
+            self.startsignal = False
+            self.running = True
+            rospy.loginfo("got the fucking signal")
+        
+        if self.running:
+            if self.rotations <= 50:
+                self.fileHandle.write(self.buildDataString(self.ax, self.ay, self.az, self.rotations, self.speed))
+                rospy.loginfo(self.buildDataString(self.ax, self.ay, self.az, self.rotations, self.speed))
+            elif self.rotations > 50:
+                self.fileHandle.close()
+                self.running = False
+        
+
+    def callbackIMU(self, data):
+        rospy.loginfo("startsignal in imuToCsv: %s", str(self.startsignal))
+        if self.startsignal:
+            self.fileHandle = open(self.genFilename() + '.csv', 'w')
+            self.ax = 0
+            self.ay = 0
+            self.az = 0
+            self.rotations = 0
+            self.speed = 0
+            self.startsignal = False
+            self.running = True
+            rospy.loginfo("got the fucking signal")
+        
+        self.ax = data.data[0]
+        self.ay = data.data[1]
+        self.az = data.data[2]
+        
+        if self.running:
+            if self.rotations <= 50:
+                self.fileHandle.write(self.buildDataString(self.ax, self.ay, self.az, self.rotations, self.speed))
+                rospy.loginfo(self.buildDataString(self.ax, self.ay, self.az, self.rotations, self.speed))
+            elif self.rotations > 50:
+                self.fileHandle.close()
+                self.running = False
+
+    
+    def callbackRounds(self, data):
+        self.rotations = data.data
+
+    def callbackSpeed(self, data):
+        self.speed = data.data
+
+    def buildDataString(self, ax, ay, az, rotations, speed):
+        return str(ax) + ',' + str(ay) + ',' + str(az) + ',' + str(rotations) + ',' + str(speed) + '\n'
+
+    def callbackStartsignal(self, data):
+        self.startsignal = data.data
+        rospy.loginfo("current startsignal is: %s", str(data.data))
+
+    def genFilename(self):
+        dateTimeObj = datetime.now()
+        return dateTimeObj.strftime("%Y-%m-%d_%H-%M-%S")
+
+if __name__ == '__main__':
+    rospy.init_node('processIMU')
+    rospy.loginfo("started processIMU Node")
+    IMUProcess()
+    rospy.spin()

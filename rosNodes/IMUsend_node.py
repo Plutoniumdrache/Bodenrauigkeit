@@ -24,7 +24,7 @@ def collectData():
         
         accelData.data = [ax, ay, az]
         
-        rospy.loginfo("accelData: ", str(accelData[0]) + str(accelData[1]) + str(accelData[2]))
+        rospy.loginfo("accelData: %s", str(accelData.data[0]) + str(accelData.data[1]) + str(accelData.data[2]))
         pub.publish(accelData)
         rate.sleep
 

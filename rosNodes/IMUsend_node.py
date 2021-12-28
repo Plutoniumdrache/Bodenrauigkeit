@@ -11,7 +11,7 @@ from std_msgs.msg import Float32MultiArray
 time.sleep(1) # delay necessary to allow mpu9250 to settle
 
 def collectData():
-    pub = rospy.Publisher('IMU', Float32MultiArray)
+    pub = rospy.Publisher('IMU', Float32MultiArray, queue_size=10)
     rospy.init_node('IMU')
     rate = rospy.Rate(10)
     accelData = Float32MultiArray()
@@ -24,7 +24,7 @@ def collectData():
         
         accelData = [ax, ay, az]
         
-        rospy.loginfo("accelData: ", str(accelData))
+        rospy.loginfo("accelData: ", str(accelData[0] + accelData[1] + accelData[2]))
         pub.publish(accelData)
         rate.sleep
 

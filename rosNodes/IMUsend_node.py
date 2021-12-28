@@ -22,9 +22,9 @@ def collectData():
         except:
             continue
         
-        accelData = [ax, ay, az]
+        accelData.data = [ax, ay, az]
         
-        rospy.loginfo("accelData: ", str(accelData[0] + accelData[1] + accelData[2]))
+        rospy.loginfo("accelData: ", str(accelData[0]) + str(accelData[1]) + str(accelData[2]))
         pub.publish(accelData)
         rate.sleep
 

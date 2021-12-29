@@ -25,7 +25,7 @@ std_msgs::Bool startsignal_msg;
 ros::Publisher pub_startsignal("startsignal", &startsignal_msg);
 
 // Lenkungs Servo PWM
-ros::Subscriber<std_msgs::UInt16> sub_lenkung("lenkung", setLenkwinkel);
+ros::Subscriber<std_msgs::UInt16> sub_lenkung("angle", setLenkwinkel);
 
 // ESC PWM
 ros::Subscriber<std_msgs::UInt16> sub_speed("speed", setSpeed);
@@ -60,7 +60,13 @@ void loop()
 	startsignal_msg.data = getButtonState(STARTSIGNAL_PIN);
 	
 	pub_rounds.publish(&rounds_msg);
-	pub_startsignal.publish(&startsignal_msg);
+  
+	if (startsignal_msg.data)
+  {
+    pub_startsignal.publish(&startsignal_msg);
+    startsignal_msg.data = false;
+  }
+  
 
 	nh.spinOnce();
 	delay(30);

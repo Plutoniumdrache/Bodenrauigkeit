@@ -13,5 +13,6 @@ void setLenkwinkel(const std_msgs::UInt16& cmd_msg){
 Servo ESC;
 
 void setSpeed(const std_msgs::UInt16& cmd_msg){
-  ESC.write(cmd_msg.data); //set speed and direction  
+  ESC.write(cmd_msg.data); //set speed and direction
+  speed = cmd_msg.data;  
 }

@@ -61,12 +61,16 @@ class CruiseControl:
         self.pubSpeedAngle()
     
     def pubSpeedAngle(self):
+        try:
+            while not rospy.is_shutdown():
+                rospy.loginfo("Speed: %s", str(self.speed))
+                self.pubSpeed.publish(self.speed)
 
-        rospy.loginfo("Speed: %s", str(self.speed))
-        self.pubSpeed.publish(self.speed)
-
-        rospy.loginfo("Angle: %s", str(self.angle))
-        self.pubAngle.publish(self.angle)
+                rospy.loginfo("Angle: %s", str(self.angle))
+                self.pubAngle.publish(self.angle)
+        except rospy.ROSInterruptException:
+            pass
+        
 
 if __name__ == '__main__':
     rospy.init_node('cruiseControl') # only one init call

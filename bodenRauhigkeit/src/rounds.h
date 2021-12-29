@@ -5,7 +5,9 @@ int getRounds();
 int getRounds(){
     static int umdrehung = 0;
     static bool pegel = false;
-
+    if (speed > 90){
+        umdrehung = 0;
+    }
     // read the input on analog pin 0:
     int sensorValue = analogRead(OPTISCHER_SENSOR_PIN);
     // Convert the analog reading (which goes from 0 - 1023) to a voltage (0 - 5V):

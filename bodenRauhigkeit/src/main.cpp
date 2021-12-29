@@ -5,6 +5,9 @@
 #define ESC_PWM_PIN 13
 #define STARTSIGNAL_PIN 2
 
+// globals
+int speed = 0;
+
 #include <ros.h>
 #include <std_msgs/UInt16.h>
 #include <std_msgs/Float32.h>
@@ -15,6 +18,7 @@
 #include "servoControl.h"
 
 ros::NodeHandle  nh;
+
 
 // Umdrehungs Data:
 std_msgs::UInt16 rounds_msg;
@@ -31,7 +35,6 @@ ros::Subscriber<std_msgs::UInt16> sub_lenkung("angle", setLenkwinkel);
 ros::Subscriber<std_msgs::UInt16> sub_speed("speed", setSpeed);
 
 
-
 void setup() {
  
   nh.advertise(pub_rounds);
@@ -46,8 +49,6 @@ void setup() {
   nh.subscribe(sub_speed);
   ESC.attach(ESC_PWM_PIN);
 
-
-
   // Tasterstuff:
   pinMode(STARTSIGNAL_PIN, INPUT_PULLUP);
 
@@ -59,8 +60,8 @@ void loop()
 	rounds_msg.data = getRounds();
 	startsignal_msg.data = getButtonState(STARTSIGNAL_PIN);
 	
-	pub_rounds.publish(&rounds_msg);
-  
+  pub_rounds.publish(&rounds_msg);
+ 
 	if (startsignal_msg.data)
   {
     pub_startsignal.publish(&startsignal_msg);

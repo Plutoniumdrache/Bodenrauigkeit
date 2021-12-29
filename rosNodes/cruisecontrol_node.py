@@ -58,18 +58,14 @@ class CruiseControl:
         self.rounds = data.data
         if self.rounds >= 50:
             self.speed = 100
-        self.pubSpeedAngle()
+            self.pubSpeedAngle()
     
     def pubSpeedAngle(self):
-        try:
-            while not rospy.is_shutdown():
-                rospy.loginfo("Speed: %s", str(self.speed))
-                self.pubSpeed.publish(self.speed)
+        rospy.loginfo("Speed: %s", str(self.speed))
+        self.pubSpeed.publish(self.speed)
 
-                rospy.loginfo("Angle: %s", str(self.angle))
-                self.pubAngle.publish(self.angle)
-        except rospy.ROSInterruptException:
-            pass
+        rospy.loginfo("Angle: %s", str(self.angle))
+        self.pubAngle.publish(self.angle)
         
 
 if __name__ == '__main__':

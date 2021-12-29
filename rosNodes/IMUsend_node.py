@@ -26,7 +26,7 @@ def collectData():
         
         rospy.loginfo("accelData: %s", str(accelData.data[0]) + str(accelData.data[1]) + str(accelData.data[2]))
         pub.publish(accelData)
-        rate.sleep
+        rate.sleep()
 
 if __name__ == '__main__':
     try:

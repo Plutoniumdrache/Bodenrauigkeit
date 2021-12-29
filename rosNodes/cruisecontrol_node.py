@@ -9,7 +9,7 @@ def cruiseControl():
     pubAngle = rospy.Publisher('angle', UInt16, queue_size=10)
 
     rospy.init_node('cruiseControl') # only one init call
-    rate = rospy.Rate(10) # 10 Hz
+    rate = rospy.Rate(1) # 1 Hz
     speed = 90
     angle = 90
 
@@ -20,7 +20,7 @@ def cruiseControl():
         rospy.loginfo("Angle: %s", str(angle))
         pubAngle.publish(angle)
 
-        rate.sleep
+        rate.sleep()
 
 if __name__ == '__main__':
     try:

@@ -51,7 +51,7 @@ class CruiseControl:
     
     def callbackStartsignal(self, data):
         self.startsignal = data.data
-        self.speed = 90
+        self.speed = 85
         self.pubSpeedAngle()
     
     def callbackRounds(self, data):

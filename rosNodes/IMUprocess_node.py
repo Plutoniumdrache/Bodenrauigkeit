@@ -51,7 +51,7 @@ class IMUProcess:
     def callbackIMU(self, data):
         rospy.loginfo("startsignal in imuToCsv: %s", str(self.startsignal))
         if self.startsignal:
-            self.fileHandle = open(self.genFilename() + '.csv', 'w')
+            self.fileHandle = open('/automnt/usb-stick/' + self.genFilename() + '.csv', 'w')
             self.ax = 0
             self.ay = 0
             self.az = 0

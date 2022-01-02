@@ -1,9 +1,13 @@
+
 <launch>
     
     <node name = "IMUprocess_node" pkg="floorpack" type="IMUprocess_node.py" output="screen" />
     <node name = "IMUsend_node" pkg="floorpack" type="IMUsend_node.py" output="screen" />
     <node name = "cruisecontrol_node" pkg="floorpack" type="cruisecontrol_node.py" output="screen" />
-    <node name = "serialnodestartup_node" pkg="floorpack" type="serialnodestartup_node.py" output="screen" />
-
+    
+    <node name="serial_node"        pkg="rosserial_python"      type="serial_node.py">
+    <param name="port"              type="string"               value="/dev/ttyACM0"/>
+    <param name="baud"              type="int"                  value="57600"/>
+    </node>
 
 </launch>

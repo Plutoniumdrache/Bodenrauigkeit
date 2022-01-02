@@ -1,0 +1,10 @@
+[Unit]
+Description=floorpack
+
+[Service]
+Type=forking
+ExecStart=/home/ubuntu/scripts/startup_launch.sh
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

@@ -1,11 +1,12 @@
-# Anleitung Erstellung Struktur für ROS Package
+# Anleitung für die Erstellung des gesamten ROS Systems
+Diese Anleitung bezieht sich auf den Raspberry PI, für den Arduino siehe bite anderes README im Arduino Ordner.
 
-### 1. Systemvorausetzungen
+# 1. Systemvorausetzungen
 Vorraussetzung ist ein System mit Ubuntu 18.04 LTS mit ROS **melodic**.
 Es ist vollkommen ausreichend und geht auch schneller lediglich die `ros-base` Version zu installieren.
 Installationsanleitung [hier](http://wiki.ros.org/melodic/Installation/Ubuntu)
 
-### 2. Erstellen des ROS Packages
+# 2. Erstellen des ROS Packages
 ROS Tutorials [hier](http://wiki.ros.org/ROS/Tutorials) bis zum Punkt "3. Creating a ROS Package" ausführen.  
 
 Den Namen `beginner_tutorials` gegen `floorpack` austauschen.
@@ -64,7 +65,7 @@ $ ls
 ```
 Die gelisteten Dateien die ausführbar gemacht wurden erscheinen jetzt in einer anderen Textfarbe.
 
-##### setup.bash Dateien sourcen
+## 2.1 setup.bash Dateien sourcen
 
 Für einen einwandfreien Ablauf und für die Auführung der launch files müssen die setup.bash Dateien gesourcet werden.
 
@@ -75,13 +76,13 @@ source /opt/ros/melodic/setup.bash
 source ~/catkin_ws/devel/setup.bash
 ```
 
-### 3. Installation von rosserial auf dem PI
+# 3. Installation von rosserial auf dem PI
 
 ```
 sudo apt-get install ros-indigo-rosserial-arduino
 sudo apt-get install ros-indigo-rosserial
 ```
-### 4. Einschalten des I2C Bus
+# 4. Einschalten des I2C Bus
 Hierfür muss die Datei `/etc/udev/rules.d/99-com.rules` edetiert werden. 
 
 In der die Datei folgende Zeile edetieren:
@@ -96,14 +97,14 @@ Sollte die Datei nicht bestehen, muss diese erstellt werden und die Zeile hinzug
 ```
 sudo chmod a+rw /dev/i2c-*
 ```
-### 5. Installation von Python Package smbus
+# 5. Installation von Python Package smbus
 Damit die IMU ausgelesen werden kann wird das [Python Package](https://pypi.org/project/smbus/) smbus benötigt.
 
 ```
 pip install smbus 
 ```
 
-### 6. Starten der nodes bei Systemstart konfigurieren
+# 6. Starten der nodes bei Systemstart konfigurieren
 
 Es muss als erstes das Paket `robot_upstart` installiert werden.
 ```
@@ -134,7 +135,7 @@ Als nächstes die beiden Anweisungen ausführen.
 $ sudo systemctl daemon-reload
 $ sudo systemctl start floorpack
 ```
-#### Testen
+## 6.1 Testen
 Man muss den PC nicht jedesmal neustarten. Getestet werden kann folgendermaßen:
 ```
 $ sudo systemctl start floorpack.service
@@ -150,23 +151,23 @@ $ sudo systemctl stop floorpack.service
 $ rosnode list 
 ERROR: Unable to communicate with master!
 ```
-#### Ein- und Ausschalten des automatischen Starts
+## 6.2 Ein- und Ausschalten des automatischen Starts
 Ausschalten:
 ```sudo systemctl disable floorpack.service```
 
 Einschalten:
 ```sudo systemctl enable floorpack.service```
 
-#### Komplettes deinstallieren der Konfiguration
+## 6.3 Komplettes deinstallieren der Konfiguration
 ```$ rosrun robot_upstart uninstall floorpack```
 
 Weitere Infos zu `robot_upstart` [hier](https://roboticsbackend.com/make-ros-launch-start-on-boot-with-robot_upstart/).
 
-### 7. Autostart Konfiguration
+# 7. Autostart Konfiguration
 Bis hierher sollte alles funktionieren nachdem man sich auf dem Desktop eingeloggt hat. (Vorausgesetzt man nutzt einen Desktop...)
 Damit das ganze System auch ohne Tastatur und Bildschirm funktionier muss der automatische Login aktiviert werden.
 
-#### Als erstes den Desktop deaktivieren.
+## 7.1 Als erstes den Desktop deaktivieren.
 ```
 systemctl enable,disable <YOUR_DESKTOP_MANAGER>
 ```
@@ -178,7 +179,7 @@ service  <YOUR_DESKTOP_MANAGER> start,stop
 ```
 In unserem Fall `lightdm`
 
-#### Autologin konfigurieren
+## 7.2 Autologin konfigurieren
 ```
 sudo systemctl edit getty@tty1.service
 ```
@@ -193,7 +194,7 @@ Jetzt startet das System **ohne** grafische Benutzeroberfläche!
 
 [Quelle Autologin](https://itectec.com/ubuntu/ubuntu-how-to-get-autologin-at-startup-working-on-ubuntu-server-16-04-1/)
 
-### 8. Automount konfigurieren
+# 8. Automount konfigurieren
 Da es sich um ein Server Image ohne Desktop handelt werden USB-Geräte nicht automatisch ins Dateisystem eingefügt. Die Anleitung [hier](https://wiki.ubuntuusers.de/USB-Datentr%C3%A4ger_automatisch_einbinden/) durcharbeiten um dies zu ändern. (Stichwort: autofs) 
 
 Jetzt sollte der USB-Stick mit unter dem Pfad `/automnt/usb-stick/<filename.csv>` verfügbar sein.

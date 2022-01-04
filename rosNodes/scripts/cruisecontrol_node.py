@@ -36,7 +36,7 @@ class CruiseControl:
         # Parameter
         self.rate = rospy.Rate(1) # 1 Hz
         self.speed = 100
-        self.angle = 90
+        self.angle = 93 # small offset correction because of the tape on the wheel
         self.startsignal = False
         self.rounds = 0
 

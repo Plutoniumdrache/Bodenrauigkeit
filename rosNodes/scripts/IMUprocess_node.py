@@ -93,6 +93,6 @@ class IMUProcess:
 
 if __name__ == '__main__':
     rospy.init_node('processIMU')
-    rospy.loginfo("started processIMU Node")
+    rospy.loginfo("started IMUprocess node")
     IMUProcess()
     rospy.spin()

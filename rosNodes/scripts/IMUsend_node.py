@@ -13,6 +13,8 @@ time.sleep(1) # delay necessary to allow mpu9250 to settle
 def collectData():
     pub = rospy.Publisher('IMU', Float32MultiArray, queue_size=1)
     rospy.init_node('IMU')
+    rospy.loginfo("started IMUsend node")
+
     rate = rospy.Rate(10) # 10 Hz
     accelData = Float32MultiArray()
         

@@ -43,5 +43,6 @@ class CruiseControl:
 
 if __name__ == '__main__':
     rospy.init_node('cruiseControl') # only one init call
+    rospy.loginfo("started cruisecontrol node")
     CruiseControl()
     rospy.spin()

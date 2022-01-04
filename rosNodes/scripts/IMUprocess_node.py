@@ -1,5 +1,10 @@
 #!/usr/bin/env python
 
+"""
+ROS node for logging the data from the IMU, the number of rotations and 
+the speed PWM signal value. The data is being stored in a .csv file on an USB flash drive.
+"""
+
 import rospy
 from std_msgs.msg import UInt16, Float32MultiArray, Bool
 from datetime import date, datetime
@@ -25,32 +30,11 @@ class IMUProcess:
 
         # Publishers
             # none
-
-    def imuToCsv(self):
-        rospy.loginfo("startsignal in imuToCsv: %s", str(self.startsignal))
-        if self.startsignal:
-            self.fileHandle = open(self.genFilename() + '.csv', 'w')
-            self.ax = 0
-            self.ay = 0
-            self.az = 0
-            self.rotations = 0
-            self.speed = 0
-            self.startsignal = False
-            self.running = True
-            rospy.loginfo("got the fucking signal")
         
-        if self.running:
-            if self.rotations <= 50:
-                self.fileHandle.write(self.buildDataString(self.ax, self.ay, self.az, self.rotations, self.speed))
-                rospy.loginfo(self.buildDataString(self.ax, self.ay, self.az, self.rotations, self.speed))
-            if self.rotations >= 50:
-                self.fileHandle.close()
-                self.running = False
-        
-
     def callbackIMU(self, data):
         rospy.loginfo("startsignal in imuToCsv: %s", str(self.startsignal))
         if self.startsignal:
+            # because were using the autofs function to automount the flash drive the path is /automnt/usb-stick/
             self.fileHandle = open('/automnt/usb-stick/' + self.genFilename() + '.csv', 'w')
             self.ax = 0
             self.ay = 0
@@ -73,7 +57,6 @@ class IMUProcess:
                 self.fileHandle.close()
                 self.running = False
 
-    
     def callbackRounds(self, data):
         self.rotations = data.data
 

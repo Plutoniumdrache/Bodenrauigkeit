@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+"""
+ROS node for controlling the RC-Car and driving a specific distance
+"""
+
 import rospy
 from std_msgs.msg import UInt16
 from std_msgs.msg import Bool

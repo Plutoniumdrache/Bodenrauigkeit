@@ -5,7 +5,7 @@ int getRounds();
 int getRounds(){
     static int umdrehung = 0;
     static bool pegel = false;
-    if (speed > 90){
+    if (speed > 89){
         umdrehung = 0;
     }
     // read the input on analog pin 0:

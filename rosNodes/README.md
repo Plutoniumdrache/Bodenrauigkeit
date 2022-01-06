@@ -1,8 +1,12 @@
 # Anleitung für die Erstellung des gesamten ROS Systems
-Diese Anleitung bezieht sich auf den Raspberry PI, für den Arduino siehe bite anderes README im Arduino Ordner.
+Diese Anleitung bezieht sich auf den Raspberry PI, für den Arduino siehe bitte anderes README im Arduino Ordner.
 
 # 1. Systemvorausetzungen
-Vorraussetzung ist ein System mit Ubuntu 18.04 LTS mit ROS **melodic**.
+Vorraussetzung ist ein System mit Ubuntu 18.04 LTS mit ROS **melodic**. 
+
+Installiert wurde folgendes Image:
+[ubuntu-18.04.5-preinstalled-server-armhf+raspi3.img](https://cdimage.ubuntu.com/ubuntu/releases/18.04.5/release/)
+
 Es ist vollkommen ausreichend und geht auch schneller lediglich die `ros-base` Version zu installieren.
 Installationsanleitung [hier](http://wiki.ros.org/melodic/Installation/Ubuntu)
 

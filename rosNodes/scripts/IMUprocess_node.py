@@ -50,10 +50,10 @@ class IMUProcess:
         self.az = data.data[2]
         
         if self.running:
-            if self.rotations <= 50:
+            if self.rotations <= 45:
                 self.fileHandle.write(self.buildDataString(self.ax, self.ay, self.az, self.rotations, self.speed))
                 rospy.loginfo(self.buildDataString(self.ax, self.ay, self.az, self.rotations, self.speed))
-            if self.rotations >= 50:
+            if self.rotations >= 45:
                 self.fileHandle.close()
                 self.running = False
 

@@ -33,7 +33,7 @@ class CruiseControl:
     
     def callbackRounds(self, data):
         self.rounds = data.data
-        if self.rounds >= 50:
+        if self.rounds >= 45:
             self.speed = self.vehicleStop
             self.pubSpeedAngle()
     

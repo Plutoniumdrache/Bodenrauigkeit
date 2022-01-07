@@ -28,7 +28,7 @@ def MPU6050_start():
     #Write to Accel configuration register
     accel_config_sel = [0b00000,0b01000,0b10000,0b11000] # byte registers
     accel_config_vals = [2.0,4.0,8.0,16.0] # g (g = 9.81 m/s^2)
-    accel_indx = 0                            
+    accel_indx = 3                            
     bus.write_byte_data(MPU6050_ADDR, ACCEL_CONFIG, int(accel_config_sel[accel_indx]))
     time.sleep(0.1)
     # interrupt register (related to overflow of data [FIFO])

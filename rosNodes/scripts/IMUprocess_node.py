@@ -10,7 +10,7 @@ from std_msgs.msg import UInt16, Float32MultiArray, Bool
 from datetime import date, datetime
 
 class IMUProcess:
-    def __init__(self):
+    def __init__(self, maxRotations):
         # Parameter
         self.ax = 0
         self.ay = 0
@@ -21,6 +21,7 @@ class IMUProcess:
         self.filename = ""
         self.fileHandle = None
         self.running = False
+        self.maxRotations = maxRotations
         
         # Subscribers
         rospy.Subscriber('IMU', Float32MultiArray, self.callbackIMU)
@@ -40,7 +41,6 @@ class IMUProcess:
             self.ay = 0
             self.az = 0
             self.rotations = 0
-            self.speed = 0
             self.startsignal = False
             self.running = True
             rospy.loginfo("got the fucking signal")
@@ -50,10 +50,10 @@ class IMUProcess:
         self.az = data.data[2]
         
         if self.running:
-            if self.rotations <= 45:
+            if self.rotations <= self.maxRotations:
                 self.fileHandle.write(self.buildDataString(self.ax, self.ay, self.az, self.rotations, self.speed))
                 rospy.loginfo(self.buildDataString(self.ax, self.ay, self.az, self.rotations, self.speed))
-            if self.rotations >= 45:
+            if self.rotations >= self.maxRotations:
                 self.fileHandle.close()
                 self.running = False
 
@@ -77,5 +77,5 @@ class IMUProcess:
 if __name__ == '__main__':
     rospy.init_node('processIMU')
     rospy.loginfo("started IMUprocess node")
-    IMUProcess()
+    IMUProcess(maxRotations=45)
     rospy.spin()

@@ -9,7 +9,7 @@ from std_msgs.msg import UInt16
 from std_msgs.msg import Bool
 
 class CruiseControl:
-    def __init__(self):
+    def __init__(self, driveSpeed, maxRotations):
         # Parameter
         self.rate = rospy.Rate(1) # 1 Hz
         self.vehicleStop = 90 # vehicle stops
@@ -17,6 +17,8 @@ class CruiseControl:
         self.angle = 93 # small offset correction because of the tape on the wheel
         self.startsignal = False
         self.rounds = 0
+        self.driveSpeed = driveSpeed
+        self.maxRotations = maxRotations
 
         # Subcribers
         self.subStartsignal = rospy.Subscriber('startsignal', Bool, self.callbackStartsignal)
@@ -28,12 +30,12 @@ class CruiseControl:
 
     def callbackStartsignal(self, data):
         self.startsignal = data.data
-        self.speed = 85 # slow forward
+        self.speed = self.driveSpeed # slow forward
         self.pubSpeedAngle()
     
     def callbackRounds(self, data):
         self.rounds = data.data
-        if self.rounds >= 45:
+        if self.rounds >= self.maxRotations:
             self.speed = self.vehicleStop
             self.pubSpeedAngle()
     
@@ -48,5 +50,5 @@ class CruiseControl:
 if __name__ == '__main__':
     rospy.init_node('cruiseControl') # only one init call
     rospy.loginfo("started cruisecontrol node")
-    CruiseControl()
+    CruiseControl(maxRotations=45, driveSpeed=85)
     rospy.spin()

@@ -16,9 +16,12 @@ int speed = 0;
 #include "rounds.h"
 #include "button.h"
 #include "servoControl.h"
+#include "timer.h"
+
 
 ros::NodeHandle  nh;
-
+timer clock;
+button startbutton;
 
 // Umdrehungs Data:
 std_msgs::UInt16 rounds_msg;
@@ -36,7 +39,8 @@ ros::Subscriber<std_msgs::UInt16> sub_speed("speed", setSpeed);
 
 
 void setup() {
- 
+  startbutton.initializeButton(STARTSIGNAL_PIN);
+
   nh.advertise(pub_rounds);
   nh.advertise(pub_startsignal);
 
@@ -56,19 +60,12 @@ void setup() {
 
 void loop() 
 {   
-
 	rounds_msg.data = getRounds();
-	startsignal_msg.data = getButtonState(STARTSIGNAL_PIN);
+	startsignal_msg.data = startbutton.isButtonPressed();
 	
   pub_rounds.publish(&rounds_msg);
- 
-	if (startsignal_msg.data)
-  {
-    pub_startsignal.publish(&startsignal_msg);
-    startsignal_msg.data = false;
-  }
+  pub_startsignal.publish(&startsignal_msg);
   
-
 	nh.spinOnce();
-	delay(30);
+  delay(30);
 }

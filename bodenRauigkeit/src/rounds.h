@@ -1,11 +1,12 @@
 #include <Arduino.h>
 
-int getRounds();
+int getRounds(bool reset);
 
-int getRounds(){
+int getRounds(bool reset){
     static int umdrehung = 0;
     static bool pegel = false;
-    if (speed > 89){
+    if (reset){
+        tmp = false;
         umdrehung = 0;
     }
     // read the input on analog pin 0:

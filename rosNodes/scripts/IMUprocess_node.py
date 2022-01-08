@@ -16,7 +16,7 @@ class IMUProcess:
         self.ay = 0
         self.az = 0
         self.rotations = 0
-        self.speed = 0
+        #self.speed = 0
         self.startsignal = False
         self.filename = ""
         self.fileHandle = None

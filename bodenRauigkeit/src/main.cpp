@@ -7,6 +7,7 @@
 
 // globals
 int speed = 0;
+bool tmp = false;
 
 #include <ros.h>
 #include <std_msgs/UInt16.h>
@@ -52,20 +53,19 @@ void setup() {
 
   nh.subscribe(sub_speed);
   ESC.attach(ESC_PWM_PIN);
-
-  // Tasterstuff:
-  pinMode(STARTSIGNAL_PIN, INPUT_PULLUP);
-
 }
 
 void loop() 
 {   
-	rounds_msg.data = getRounds();
 	startsignal_msg.data = startbutton.isButtonPressed();
-	
+  if(startsignal_msg.data){
+    pub_startsignal.publish(&startsignal_msg);
+    tmp = true;
+  }
+
+  rounds_msg.data = getRounds(tmp);
   pub_rounds.publish(&rounds_msg);
-  pub_startsignal.publish(&startsignal_msg);
-  
+
 	nh.spinOnce();
   delay(30);
 }

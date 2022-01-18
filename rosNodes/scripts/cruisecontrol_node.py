@@ -5,8 +5,7 @@ ROS node for controlling the RC-Car and driving a specific distance
 """
 
 import rospy
-from std_msgs.msg import UInt16
-from std_msgs.msg import Bool
+from std_msgs.msg import UInt16, Bool
 
 class CruiseControl:
     def __init__(self, driveSpeed, maxRotations):
@@ -27,11 +26,13 @@ class CruiseControl:
         # Publishers
         self.pubSpeed = rospy.Publisher('speed', UInt16, queue_size=10)
         self.pubAngle = rospy.Publisher('angle', UInt16, queue_size=10)
+        self.pubDriveDistance = rospy.Publisher('drivedistance', UInt16, queue_size=10)
 
     def callbackStartsignal(self, data):
         self.startsignal = data.data
         self.speed = self.driveSpeed # slow forward
         self.pubSpeedAngle()
+        self.pubDriveDistance.publish(self.maxRotations)
     
     def callbackRounds(self, data):
         self.rounds = data.data

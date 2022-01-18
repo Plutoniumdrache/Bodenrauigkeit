@@ -7,6 +7,8 @@ Vorraussetzung ist ein System mit Ubuntu 18.04 LTS mit ROS **melodic**.
 Installiert wurde folgendes Image:
 [ubuntu-18.04.5-preinstalled-server-armhf+raspi3.img](https://cdimage.ubuntu.com/ubuntu/releases/18.04.5/release/)
 
+Optional kann noch eine Desktopumgebung installiert werden. Empfohlen wird dabei als Displaymanager `lightdm` und als grafische Oberfläche den "Xubuntu Server Core Desktop" zu installieren. [Weiterführende Informationen zur Installation von Desktops.](https://phoenixnap.com/kb/how-to-install-a-gui-on-ubuntu)
+
 Es ist vollkommen ausreichend und geht auch schneller lediglich die `ros-base` Version zu installieren.
 Installationsanleitung [hier](http://wiki.ros.org/melodic/Installation/Ubuntu)
 
@@ -51,6 +53,7 @@ Zum Einbinden der rosNodes muss folgende Dateistruktur aufgebaut werden: Die Ord
                 |   |–– cruisecontrol_node.py
                 |   |–– IMUprocess_node.py
                 |   |–– IMUsend_node.py
+                |   |–– IMUeval_node.py
                 |   |–– mpu9250_i2c.py
                 |
                 |–– launch
@@ -97,15 +100,20 @@ MODE muss zu "0666" geändert werden.
 
 Sollte die Datei nicht bestehen, muss diese erstellt werden und die Zeile hinzugefügt werden. Auf `MODE="0666"` und das "==" achten!
 
-(Nicht empfohlen) Temporär lässt sich der Bus mittels folgendem Kommando einschalten:
+**(Nicht empfohlen!)** Temporär lässt sich der Bus mittels folgendem Kommando einschalten:
 ```
 sudo chmod a+rw /dev/i2c-*
 ```
-# 5. Installation von Python Package smbus
-Damit die IMU ausgelesen werden kann wird das [Python Package](https://pypi.org/project/smbus/) smbus benötigt.
+# 5. Installation der Python Packages smbus und numpy
+Damit die IMU ausgelesen werden kann wird das [Python Package](https://pypi.org/project/smbus/) `smbus` benötigt.
 
 ```
 pip install smbus 
+```
+Damit die Auswertung der Messdaten erfolgen kann wird das [Python Package](https://numpy.org/install/) `numpy` benötigt.
+
+```
+pip install numpy 
 ```
 
 # 6. Starten der nodes bei Systemstart konfigurieren
@@ -175,7 +183,7 @@ Damit das ganze System auch ohne Tastatur und Bildschirm funktionier muss der au
 ```
 systemctl enable,disable <YOUR_DESKTOP_MANAGER>
 ```
-In unserem Fall `lightdm`
+In unserem Fall ist der Desktopmanager `lightdm`
 
 Zum aktivieren:
 ```

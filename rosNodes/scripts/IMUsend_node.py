@@ -15,7 +15,7 @@ def collectData():
     rospy.init_node('IMU')
     rospy.loginfo("started IMUsend node")
 
-    rate = rospy.Rate(10) # 10 Hz
+    rate = rospy.Rate(20) # 20 Hz
     accelData = Float32MultiArray()
         
     while not rospy.is_shutdown():

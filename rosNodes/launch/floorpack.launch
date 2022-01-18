@@ -20,6 +20,13 @@
         type="cruisecontrol_node.py" 
         output="screen" 
     />
+
+    <node 
+        name="IMUeval_node"
+        pkg="floorpack"
+        type="IMUeval_node.py"
+        output="screen"
+    />
     
     <node 
         name="serial_node"
@@ -34,4 +41,5 @@
             type="int"
             value="57600"/>
     </node>
+
 </launch>
